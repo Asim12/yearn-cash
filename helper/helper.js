@@ -645,7 +645,11 @@ module.exports = {
 
     getContractAddress : (symbol ,providerType) => {
         return new Promise (async(resolve) => {
+            console.log('symbol', symbol)
+            console.log('providerType', providerType)
+
             let data = await user_token.findOne({symbol : symbol, providerType : providerType })
+            console.log('data',data)
             if(data){
                 resolve(data.contract_address)
             }else{

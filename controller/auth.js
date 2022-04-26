@@ -257,17 +257,16 @@ router.post('/addToken', async (req, res) => {
 
         let Web3Client = await helper.getWebClient(req.body.providerType)
         let contract        =  await helper.getContractAddressInstanse(req.body.contract_address, Web3Client)
-
         let checkStatus     =  await helper.isContractAddressIsValid(contract);
+        // if(checkStatus.status == 404){
+        //     res.status(checkStatus.status).send({message: 'invalid token'});
+        // }
         let isAlreadyExists =  await helper.isContractAddressAlreadyExists(checkStatus.symbol,  req.body.user_id);
-        console.log('isAlreadyExists', isAlreadyExists)
         if(checkStatus.status == 200 && isAlreadyExists == false){
             helper.addContractAddress(req.body.contract_address, checkStatus.symbol, req.body.status, req.body.user_id, checkStatus.decimals , req.body.providerType);  
         }
-
         let message = (checkStatus.status == 200 && isAlreadyExists == false) ? 'Successfully Added!!!' : 'Token is already exists!!!';
         checkStatus.message = message
-
         res.status(checkStatus.status).send(checkStatus);
     }else{
         let response = {
